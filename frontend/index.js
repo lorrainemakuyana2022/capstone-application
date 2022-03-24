@@ -3,22 +3,25 @@ console.clear()
 
 const renderedTable = document.getElementById('data')
 
+const currentStatusHTMLElement = document.getElementById('status')
+
 function fetchData() {
 
     fetch('http://localhost:8080/api/get-data')
         .then(response => response.json())
         .then(response => {
             let data = response.data
+            
             const currentStatus = data[0].class
-            const currentStatusHTMLElement = document.getElementById('status')
 
             if (currentStatus === 'undefined' || currentStatus === 'uncertain') {
                 currentStatusHTMLElement.className = 'undefined'
             } else {
                 currentStatusHTMLElement.className = ''
             }
+
+            currentStatusHTMLElement.innerHTML = currentStatus
             
-            document.getElementById('status').innerHTML = currentStatus
             renderedTable.innerHTML = ""
 
             for (let i = 1; i < data.length; i++) {
@@ -32,9 +35,8 @@ function fetchData() {
 
 }
 
-let interval = 2000
+let interval = 500
 
 setInterval(() => {
     fetchData()
 }, interval);
-
